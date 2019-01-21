@@ -20,6 +20,7 @@ public class ScheduleController {
 		String fileName = "./activities.txt";
 		scheduleService.parseActivities(fileName);
 		scheduleService.createTeams(totalTeams);
+		scheduleService.createSchedule(totalTeams);
 		
 		return null;
 		
