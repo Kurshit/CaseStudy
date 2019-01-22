@@ -1,5 +1,7 @@
 package com.delloite.awayday.controller;
 
+import java.io.FileNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +21,7 @@ public class ScheduleController {
 	private String filePathAndName;
 	
 	@RequestMapping(value = "/getschedule/{totalTeams}", method = RequestMethod.GET)
-	public String getSchedule(@PathVariable("totalTeams") int totalTeams) {
+	public String getSchedule(@PathVariable("totalTeams") int totalTeams) throws FileNotFoundException {
 	
 		scheduleService.parseActivities(filePathAndName);
 		scheduleService.createTeams(totalTeams);
