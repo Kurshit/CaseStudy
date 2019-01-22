@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,14 +23,13 @@ public class ScheduleController {
 	private String filePathAndName;
 	
 	@RequestMapping(value = "/getschedule/{totalTeams}", method = RequestMethod.GET)
-	public String getSchedule(@PathVariable("totalTeams") int totalTeams) throws FileNotFoundException {
+	public ResponseEntity<String> getSchedule(@PathVariable("totalTeams") int totalTeams) throws FileNotFoundException {
 	
 		scheduleService.parseActivities(filePathAndName);
 		scheduleService.createTeams(totalTeams);
-		scheduleService.createSchedule(totalTeams);
+		String response = scheduleService.createSchedule(totalTeams);
 		
-		return null;
-		
+		return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).body(response);
 	}
 
 }

@@ -79,6 +79,7 @@ public class ScheduleService {
 
 				fileNameAndPath = file.getPath();
 			}
+			logger.info("File path is " + fileNameAndPath);
 			Stream<String> stream = Files.lines(Paths.get(fileNameAndPath));
 			stream.forEach(line -> {
 				Map<String, Object> activityDetails = new HashMap<>();
@@ -110,7 +111,7 @@ public class ScheduleService {
 		}
 	}
 
-	public void createSchedule(int totalTeams) {
+	public String createSchedule(int totalTeams) {
 		List<StringBuilder> scheduleStringBuilderList = new ArrayList<>();
 		for(int i=0; i< totalTeams; i++) {
 			scheduleStringBuilderList.add(new StringBuilder().append(TEAM).append(i+1).append(COLUN));
@@ -175,14 +176,20 @@ public class ScheduleService {
 				startTime = startTime.plus(5,ChronoUnit.MINUTES);
 			}
 			
+			StringBuilder finalScheduleString = new StringBuilder();
+			
 			for(StringBuilder s : scheduleStringBuilderList) {
 				s.append(NEW_LINE).append(endTime.format(DateTimeFormatter.ofPattern(TWELVE_HR_TIME_FORMATE))).append(SPACE_COLUN_SPACE).append(STAFF_MOTIVATION_PRESENTATION);
 				System.out.println(s);
 				System.out.println();
+				finalScheduleString.append("\n").append(s).append("\n");
 			}
+			
+			return finalScheduleString.toString();
 
 		} catch(Exception e) {
 			logger.error("Unexpected error occured");
+			return "";
 		}		
 
 	}
