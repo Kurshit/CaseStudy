@@ -6,7 +6,9 @@ import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -74,9 +76,13 @@ public class ScheduleService {
 				HashMap<String,Object> teamsDetailsMap = (HashMap<String, Object>) teams.get("Team"+(i+1));
 				
 				LocalTime currentActivityEndsAt = (LocalTime) teamsDetailsMap.get("currentActivityEndsAt");
+				
+				releaseActivitiesDoneAtThisHour(startTime);
 								
 				if(startTime.compareTo(currentActivityEndsAt) >= 0) {
 					
+					
+					/*
 					String onGoingActivity = (String) teamsDetailsMap.get("onGoingActivity");
 					if(!onGoingActivity.isEmpty()) {
 						Map<String, Object> onGoingActivityMap = activities.get(onGoingActivity);
@@ -85,7 +91,7 @@ public class ScheduleService {
 							teamsDetailsMap.put("onGoingActivity", "");
 						}
 						
-					}
+					}*/
 					
 					String validActivity = getValidActivityNameForTeam("Team"+(i+1));
 					if(!validActivity.isEmpty()) {
@@ -100,7 +106,7 @@ public class ScheduleService {
 						
 						//team details changed -
 						
-						teamsDetailsMap.put("currentActivityEndsAt", currentActivityEndsAt.plus((Integer)activitiesMap.get("time"), ChronoUnit.MINUTES));
+						teamsDetailsMap.put("currentActivityEndsAt", startTime.plus((Integer)activitiesMap.get("time"), ChronoUnit.MINUTES));
 												
 						List<String> playedActivitiesList = (List<String>) teamsDetailsMap.get("activitiesPlayedList");
 						playedActivitiesList.add(validActivity);
@@ -130,6 +136,31 @@ public class ScheduleService {
 		
 		
 		
+	}
+	
+	public static void releaseActivitiesDoneAtThisHour(LocalTime startTime) {
+		
+		Collection<Map<String, Object>> mapCollection = teams.values();
+		
+		//for(HashMap<String, Object> teamsMap : mapCollection.iterator()) {
+		Iterator<Map<String,Object>> itr = mapCollection.iterator();
+		while(itr.hasNext()) {
+			Map<String,Object> teamsDetailsMap = itr.next();
+			LocalTime currentActivityEndsAt = (LocalTime) teamsDetailsMap.get("currentActivityEndsAt");
+			if(startTime.compareTo(currentActivityEndsAt) >= 0) {
+				
+				String onGoingActivity = (String) teamsDetailsMap.get("onGoingActivity");
+				if(!onGoingActivity.isEmpty()) {
+					Map<String, Object> onGoingActivityMap = activities.get(onGoingActivity);
+					if((Boolean) onGoingActivityMap.get("isOngoing")) {
+						onGoingActivityMap.put("isOngoing", false);
+						teamsDetailsMap.put("onGoingActivity", "");
+					}
+					
+				}
+			}		
+						
+		}		
 	}
 	
 	
