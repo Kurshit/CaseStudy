@@ -5,14 +5,14 @@ This application helps event organizers to organize the given activities among v
 # Useful inputs by the organizers and external configuration:
   - By Default, activities start from 9 am and ends at 5 pm with an hour of lunch break around 12 am to 1 pm. Also, the activity start time, end time and lunch time can be configured to the desired values as per user's wish. (Demonstrated in 'DEMO' section.) 
   - Last activity is always an hour long Staff Motivation Presentation.
-  - Default input file of activities (Sample Input File - activities.txt) is kept under 'activities.txt' location on build path. User can also feed his own input file by providing the path at the command line (Demonstrated  ahead).
+  - Default input file of activities (Sample Input File - activities.txt) is kept under root location on build path. User can also feed his own input file by providing the path at the command line (Demonstrated  ahead).
 
 ### Assumptions
-- The number of teams should not be greater than number of activities, as this would lead at least one team remain idle every time.
+- The number of teams should not be greater than number of activities, as this would lead to making at least one team to remain idle every time.
 - An Activity would be part of one team at a time. No two teams would take part in same activity at same time.
 - No duplicate activity : An Activity would not be assigned more than once to the same team. There is a data structure that maintains the list of valid and Non-On-Going activities list for each team for allocation.
-- Selection of activities (valid activities for that team at that time) is mostly random. However, to utilize the time efficiently  and not letting a team remain idle, for the last one hour before the Staff Motivation Presentation, the assignment of an activity to a team is based on shortest activity time. i.e. A team would be assigned an activity that is shortest of all. Please mind that this scenario taken care for the last one hour only. This avoids the starvation and utilizes the total available time. Thus, output could be different every time you run the app and generate the schedule.
-For example : If start time is 09:00 am and end time is 05:00 pm, with Staff Motivation Presentation beginning  at 5.00 pm. The teams would be allocated valid activities randomly till 4.00 pm (one hour before any provided end time). After 4.00 pm, each team would be allocated activities with the shortest valid activity available at that time. If the activity would exceed the end time - 5.00 pm, than that activity would not be allotted to the team.
+- Selection of activities (valid activities for that team at that time) is mostly random. However, to utilize the time efficiently  and not letting a team remain idle, for the last one hour before the last activity - 'Staff Motivation Presentation', the assignment of an activity to a team is based on shortest activity time. i.e. A team would be assigned an activity that is shortest of all. Please mind that this scenario has been taken care for the last one hour only. This avoids the starvation and utilizes the total available time. Thus, output could be different every time you run the application and generate the schedule.
+For example : If start time is 09:00 am and end time is 05:00 pm, with 'Staff Motivation Presentation' - The last activity- beginning  at 5.00 pm. The teams would be allotted valid activities randomly till 4.00 pm (one hour before any provided end time). After 4.00 pm, each team would be allotted activities with the shortest valid activity available at that time. If the activity would exceed the end time - 5.00 pm, than that activity would not be allotted to the team.
 
 
 ### Design and Framework:
@@ -25,16 +25,16 @@ The solution has been approached with the intention of making it loosely coupled
 
 Following steps shows the brief code flow at higher level:
 
- - Feed activities.txt input file as input, parse each line using streams and save each activity details into data structure. For each activity, Data structure holds details like - Activity Name, Activity Time, Is Activity Ongoing at given time and List of Teams that have already took part this particular activity.
- - The REST end point takes 'number of teams' as an input parameter. Take this input and create given no of teams and feed team details into a static data structure. Team details includes - Team Name, List of Activities played by each team, On Going Activity of that team at that time, Whether lunch break is done for the team and The end time of currently ongoing activity of each team.
+ - Feed activities.txt input file as input, parse each line using streams and save each activity details into data structure. For each activity, Data structure holds details like - Activity Name, Activity Time, Is Activity Ongoing at given time and List of Teams that have already took part in this particular activity.
+ - The REST end point takes 'number of teams' as an input parameter. Take this input and create given no of teams and feed team details into a static data structure. Team details include - Team Name, List of Activities played by each team, On Going Activity of that team at that time, Whether lunch break is done for the team and The end time of currently ongoing activity of each team.
  - Create Schedule - Start with the given start time and for each team, allocate the activity and update the corresponding data structures. At every 5 minutes, check if any team is free and if yes, find any valid activity - that it has not taken part before in - and assign it to the team. The process goes on till the time reaches end time. During the process, if any team gets done with any activity, the team release the activity and marks it free. Also, the checks has been done for given Lunch Time and every team gets an hour of Lunch Break whenever feasible  around Lunch Time.
  - Send output to console and as http response.
  
 ### Data Structure: 
 
-To maintain the details of each activity and teams, I have chosen Map<String, Map<String,Object>> data structure. Alternate data structure I had in my mind was to use store these records as a JSON. Given the performance of Map and java8 streams, I decided to go ahead with Map.
+To maintain the details of each activity and teams, I have chosen Map<String, Map<String,Object>> data structure. Alternate data structure I had in my mind was to store these records as a JSON. Given the performance of Map and java8 streams, I decided to go ahead with Map.
 
-### REST Enndpoint;
+### REST End Point;
 
 Following end point is to be hit to get the schedule.
 
@@ -54,8 +54,8 @@ where "numberOfTeams" is a variable that expects an integer value.
 
 This demo takes in default start time = 09:00 am, end time = 5:00 pm,  lunch time = 1:00 pm and default activities.txt file which was provided with case study. However, this could be changed as shown in demo "B" using application.properties file.
 
- 1. Clone the project and get it on your local system
- 2. To get the runnable jar wither use the readily created jar present in Root Directory of project - "awayday-1.0.0.jar" or run command prompt under root directory and run following command -
+ 1. Clone the project and get it on your local system.
+ 2. To get the runnable jar either use the readily created jar present in Root Directory of project - "awayday-1.0.0.jar" or open the command prompt under root directory and run following command -
     ```sh 
     gradlew clean build
     ```
@@ -64,12 +64,12 @@ This demo takes in default start time = 09:00 am, end time = 5:00 pm,  lunch tim
    ```sh
    java -jar awayday-1.0.0.jar
    ```
-5. This would start the app on 8080 port by default. This would consider default activities.txt file as input which is already on build path under "resource/activities.txt" location.
+5. This would start the application on 8080 port by default. This would consider default activities.txt file as input which is already on build path under "resource/activities.txt" location.
 6. Open any browser, preferably  Google Chrome, and hit the below rest end point. 
     
     http://localhost:8080/getschedule/2 
 
-    Note: "2" is the no of teams taken here as sample. You can choose to provide any number of teams, where number of teams should be less than number of activities defined.
+    Note: "2" is the no of teams taken here as sample input. You can choose to provide any number of teams, where number of teams should be less than number of activities defined.
 7. The output schedule of activities shall be visible on the browser itself as well as on command prompt console.
 
 
@@ -97,7 +97,7 @@ This demo takes in default start time = 09:00 am, end time = 5:00 pm,  lunch tim
 
 #### Externalizing configuration :
 
-Just like the acitivites.txt input file, default startTime, endTime and lunch time can be overridden while running the app through command prompt. Run the following command to run ass with user values.
+Just like the acitivites.txt input file, default startTime, endTime and lunch time can be overridden while running the application through command prompt. Run the following command to run ass with user values.
 
 ```sh
 java -jar awayday-1.0.0.jar --fileName="D:\input\activities.txt" --startTime=11:00 --endTime=19:00 --lunchTimeStartsAt=14:00 lunchTimeEndsAt=15:00
