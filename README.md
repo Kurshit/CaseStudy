@@ -4,14 +4,14 @@ This application helps event organizers to organize the given activities among v
 
 # Useful inputs by the organizers and external configuration:
   - By Default, activities start from 9 am and ends at 5 pm with an hour of lunch break around 12 am to 1 pm. Also, the activity start time, end time and lunch time can be configured to the desired values as per user's wish. (Demonstrated in 'DEMO' section.) 
-  - Last activity is always an hour long Staff Motivation Presentation.java
+  - Last activity is always an hour long Staff Motivation Presentation.
   - Default input file of activities (Sample Input File - activities.txt) is kept under 'activities.txt' location on build path. User can also feed his own input file by providing the path at the command line (Demonstrated  ahead).
 
 ### Assumptions
--- The number of teams should not be greater than number of activities, as this would lead at least one team remain idle every time.
--- An Activity would be part of one team at a time. No two teams would take part in same activity at same time.
--- No duplicate activity : An Activity would not be assigned more than once to the same team. There is a data structure that maintains the list of valid and Non-On-Going activities list for each team for allocation.
--- Selection of activities (valid activities for that team at that time) is mostly random. However, to utilize the time efficiently  and not letting a team remain idle, for the last one hour before the Staff Motivation Presentation, the assignment of an activity to a team is based on shortest activity time. i.e. A team would be assigned an activity that is shortest of all. Please mind that this scenario taken care for the last one hour only. This avoids the starvation and utilizes the total available time. Thus, output could be different every time you run the app and generate the schedule.
+- The number of teams should not be greater than number of activities, as this would lead at least one team remain idle every time.
+- An Activity would be part of one team at a time. No two teams would take part in same activity at same time.
+- No duplicate activity : An Activity would not be assigned more than once to the same team. There is a data structure that maintains the list of valid and Non-On-Going activities list for each team for allocation.
+- Selection of activities (valid activities for that team at that time) is mostly random. However, to utilize the time efficiently  and not letting a team remain idle, for the last one hour before the Staff Motivation Presentation, the assignment of an activity to a team is based on shortest activity time. i.e. A team would be assigned an activity that is shortest of all. Please mind that this scenario taken care for the last one hour only. This avoids the starvation and utilizes the total available time. Thus, output could be different every time you run the app and generate the schedule.
 For example : If start time is 09:00 am and end time is 05:00 pm, with Staff Motivation Presentation beginning  at 5.00 pm. The teams would be allocated valid activities randomly till 4.00 pm (one hour before any provided end time). After 4.00 pm, each team would be allocated activities with the shortest valid activity available at that time. If the activity would exceed the end time - 5.00 pm, than that activity would not be allotted to the team.
 
 
