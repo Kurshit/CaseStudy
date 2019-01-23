@@ -59,18 +59,31 @@ This demo takes in default start time = 09:00 am, end time = 5:00 pm,  lunch tim
     ```sh 
     gradlew clean build
     ```
+![cleanbuild](https://user-images.githubusercontent.com/30333780/51605616-8f55bf80-1f35-11e9-9e72-f1f6a6f006a4.jpg)
+    
 3. Above command would create a runnable jar file under "build\libs\awayday-1.0.0.jar".
+
+![artifact](https://user-images.githubusercontent.com/30333780/51605615-8f55bf80-1f35-11e9-814e-c0107306182f.jpg)
+
 4. Run this jar using following command 
    ```sh
    java -jar awayday-1.0.0.jar
    ```
+![run app](https://user-images.githubusercontent.com/30333780/51605620-8fee5600-1f35-11e9-8ede-c9f27b314672.jpg)
+   
 5. This would start the application on 8080 port by default. This would consider default activities.txt file as input which is already on build path under "resource/activities.txt" location.
 6. Open any browser, preferably  Google Chrome, and hit the below rest end point. 
     
     http://localhost:8080/getschedule/2 
 
-    Note: "2" is the no of teams taken here as sample input. You can choose to provide any number of teams, where number of teams should be less than number of activities defined.
+    Note: "2" is the no of teams taken here as sample input. You can choose to provide any number of teams, where number of teams should be less than number of activities defined.   
+  
 7. The output schedule of activities shall be visible on the browser itself as well as on command prompt console.
+
+
+![output on browser](https://user-images.githubusercontent.com/30333780/51605617-8fee5600-1f35-11e9-9d1d-7213d75a01bb.jpg)
+
+![output on console](https://user-images.githubusercontent.com/30333780/51605618-8fee5600-1f35-11e9-8039-add3b5ba4e24.jpg)
 
 
  #### B. Using user provided input file "activities.txt" with any number of activities
@@ -87,6 +100,9 @@ This demo takes in default start time = 09:00 am, end time = 5:00 pm,  lunch tim
    ```sh
    java -jar awayday-1.0.0.jar --fileName="D:\input\activities.txt"
    ```
+   
+ ![run app with file](https://user-images.githubusercontent.com/30333780/51605619-8fee5600-1f35-11e9-9fd8-2887668eb180.jpg)
+   
 5. This would start the app on 8080 port by default. This would consider activities.txt file as input which is present at user's own local system. 
 6. Open any browser , preferably  Google Chrome, and hit the below rest end point. 
 
