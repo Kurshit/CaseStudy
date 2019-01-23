@@ -43,6 +43,18 @@ import org.springframework.util.ResourceUtils;
 import lombok.Getter;
 import lombok.Setter;
 
+
+/**
+ * <p>The main service to generate the schedule.
+ * The startTime, endTime and Lunch time are set with default values in application.properties file.
+ * This service helps in parsing the given input file, 
+ * creating the teams with details and eventually generating the schedule.
+ *  
+ * @author Kurshit Kukreja
+ * 
+ * @since Jan'19
+ */
+
 @Service
 @Getter
 @Setter
@@ -65,7 +77,18 @@ public class ScheduleService {
 
 	@Value("${lunchTimeEndsAt:13:00}")
 	private String LUNCH_TIME_ENDS_AT;
-
+	
+	
+	/**
+	 * <p>This method helps in parsing the activity file, time taken by each activity and stores it 
+	 * into HashMap data structure. 
+	 * 
+	 * @param fileNameAndPath the path if provided by user to read input file from user's 
+	 * local system. If not given, this would consume default input file present on the class path.
+	 * 
+	 * 
+	 */
+	
 	public void parseActivities(String fileNameAndPath) {
 		try {
 			if(fileNameAndPath.isEmpty()) {
@@ -99,6 +122,16 @@ public class ScheduleService {
 
 	}
 
+	/**
+	 * <p>Following method creates the given number of team, gives it unique name and creates a data 
+	 * structure to hold the very specific inofrmation about teams like - Current on going activity,
+	 * List of all activities played by each team etc.
+	 * 
+	 * @param totalTeams the toal number of teams to be created. The totalTeams should 
+	 * NOT be greater than the number of activities in input file. This would eventually create a 
+	 * data structure - Map - to store activity details.
+	 * 
+	 */
 	public void createTeams(final int totalTeams) {
 		for(int i = 1; i<= totalTeams; i++) {
 			Map<String, Object> teamDetails = new HashMap<>();
@@ -109,7 +142,15 @@ public class ScheduleService {
 			teams.put(TEAM+i, teamDetails);			
 		}
 	}
-
+	
+	/**
+	 * This method creates a schedule and monitors if any team is donw with activity, lunch breaks 
+	 * and optimally assigns activities. 
+	 * 
+	 * @param totalTeams the toal number of teams taking part
+	 * @return resulted schedule of string of all the teams.
+	 */
+	
 	public String createSchedule(int totalTeams) {
 		List<StringBuilder> scheduleStringBuilderList = new ArrayList<>();
 		for(int i=0; i< totalTeams; i++) {
@@ -192,7 +233,15 @@ public class ScheduleService {
 		}		
 
 	}
-
+	
+	/**
+	 * This method is to release the ongoing activities by team if a team is done with the activity.
+	 * Basically, at given time, this would mark all the activities as free and available for other
+	 * teams to be used by.
+	 * 
+	 * @param startTime this is the start time of activities.
+	 */
+	
 	public void releaseActivitiesDoneAtThisHour(LocalTime startTime) {
 		Collection<Map<String, Object>> mapCollection = teams.values();
 		Iterator<Map<String,Object>> itr = mapCollection.iterator();
@@ -213,7 +262,20 @@ public class ScheduleService {
 
 		}		
 	}
-
+	
+	/**
+	 * <p>This method returns the list of all valid activities for the given team and at given time.
+	 * An activity is considered as valid for given team it it has not been consumed by given 
+	 * team before and is free to take part in at that time. Amongst list of multiple 
+	 * valid activities, any random activity is picked up until an hour before the last activity. 
+	 * During the last one hour, the shortest possible activity is picked and assigned to team. 
+	 * 
+	 * @param teamName team name for which list of valid activities is to be found
+	 * @param startTime the time at which valid activity is to be found
+	 * @param endTime the end time of all activities
+	 * @return Returns the valid team name if any or empty if no valid team is 
+	 * available at that time.
+	 */
 
 	public String getValidActivityNameForTeam(final String teamName, LocalTime startTime, LocalTime endTime) {
 		List<String> validActivityList = new ArrayList<>();
