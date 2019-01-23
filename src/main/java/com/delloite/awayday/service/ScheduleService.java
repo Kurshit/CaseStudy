@@ -40,6 +40,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
+import com.delloite.awayday.exception.EmptyInputFileException;
+import com.delloite.awayday.exception.TotalNumberOfTeamsExceedsActivitiesException;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -113,7 +116,12 @@ public class ScheduleService {
 				activityDetails.put(PLAYED_BY_TEAMS_LIST, new ArrayList<String>());
 				activities.put(activityName, activityDetails );
 			});
-
+			
+			if(activities.isEmpty()) {
+				logger.error("Input file of activities is empty");
+				throw new EmptyInputFileException("Input file of activities is empty");
+			}
+		
 		} catch (FileNotFoundException e) {
 			logger.error("Input File does not exist at provided path");
 		} catch (IOException e) {
@@ -133,6 +141,12 @@ public class ScheduleService {
 	 * 
 	 */
 	public void createTeams(final int totalTeams) {
+		
+		if(activities.size() < totalTeams) {
+			logger.error("Total number of teams %s should not be greater than total number of activities %s", totalTeams, activities.size());
+			throw new TotalNumberOfTeamsExceedsActivitiesException("Total number of teams " +totalTeams + " should not be greater than total number of activities " +activities.size());
+		}
+		
 		for(int i = 1; i<= totalTeams; i++) {
 			Map<String, Object> teamDetails = new HashMap<>();
 			teamDetails.put(CURRENT_ACTIVITY_ENDS_AT, LocalTime.parse(START_TIME));
