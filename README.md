@@ -116,7 +116,7 @@ This demo takes in default start time = 09:00 am, end time = 5:00 pm,  lunch tim
 Just like the acitivites.txt input file, default startTime, endTime and lunch time can be overridden while running the application through command prompt. Run the following command to run ass with user values.
 
 ```sh
-java -jar awayday-1.0.0.jar --fileName="D:\input\activities.txt" --startTime=11:00 --endTime=19:00 --lunchTimeStartsAt=14:00 lunchTimeEndsAt=15:00
+java -jar awayday-1.0.0.jar --fileName="D:\input\activities.txt" --startTime=11:00 --endTime=19:00 --lunchTimeStartsAt=14:00 --lunchTimeEndsAt=15:00
 ```
 
 Where start time and end time can be anything but in 24 hour format.
