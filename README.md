@@ -5,19 +5,19 @@ This application helps event organizers to organize the given activities among v
 # Useful inputs by the organizers and external configuration:
   - By Default, activities start from 9 am and ends at 5 pm with an hour of lunch break around 12 am to 1 pm. Also, the activity start time, end time and lunch time can be configured to the desired values as per user's wish. (Demonstrated in 'DEMO' section.) 
   - Last activity is always an hour long Staff Motivation Presentation.java
-  - Default input file of activities (Sample Input File - activities.txt) is kept under 'resource/inputfile/activities.txt' location on build path. User can also feed his own input file by providing the path at the command line (Denomnstrated ahead).
+  - Default input file of activities (Sample Input File - activities.txt) is kept under 'activities.txt' location on build path. User can also feed his own input file by providing the path at the command line (Demonstrated  ahead).
 
 ### Assumptions
--- The number of teams should not be greater than number of activities, as this would lead at least one team remain idle everytime.
+-- The number of teams should not be greater than number of activities, as this would lead at least one team remain idle every time.
 -- An Activity would be part of one team at a time. No two teams would take part in same activity at same time.
--- No duplicate activity : An Activity would not be assigned more than once to the same team. There is a datastructure that maintains the list of valid and Non-On-Going activities list for each team for allocation.
--- Selection of activities (valid activities for that team at that time) is mostly random. However, to utilize the time efficienly and not letting a team remain idle, for the last one hour before the Staff Motivation Presentation, the assignment of an activity to a team is based on shortest activity time. i.e. A team would be assigned an activity that is shortest of all. Please mind that this scenario taken care for the last one hour only. This avoids the starvation and utilizes the total available time. Thus, output could be different everytime you run the app and generate the schedule.
-For example : If start time is 09:00 am and end time is 05:00 pm, with Staff Motivation Presentation beggining at 5.00 pm. The teams would be allocated valid activities randomly till 4.00 pm (one hour before any provided end time). After 4.00 pm, each team would be allocated activities with the shortest valid activity available at that time. If the activity would exceed the end time - 5.00 pm, than that activity would not be alloted to the team.
+-- No duplicate activity : An Activity would not be assigned more than once to the same team. There is a data structure that maintains the list of valid and Non-On-Going activities list for each team for allocation.
+-- Selection of activities (valid activities for that team at that time) is mostly random. However, to utilize the time efficiently  and not letting a team remain idle, for the last one hour before the Staff Motivation Presentation, the assignment of an activity to a team is based on shortest activity time. i.e. A team would be assigned an activity that is shortest of all. Please mind that this scenario taken care for the last one hour only. This avoids the starvation and utilizes the total available time. Thus, output could be different every time you run the app and generate the schedule.
+For example : If start time is 09:00 am and end time is 05:00 pm, with Staff Motivation Presentation beginning  at 5.00 pm. The teams would be allocated valid activities randomly till 4.00 pm (one hour before any provided end time). After 4.00 pm, each team would be allocated activities with the shortest valid activity available at that time. If the activity would exceed the end time - 5.00 pm, than that activity would not be allotted to the team.
 
 
 ### Design and Framework:
 
-I have used Spring Boot framework and Spring MVC design to develop this application wherein I have let user to configure and feed various inputs as per requirements. The final runnable artifect - production ready artifect- is a jar file with name - "awayday-1.0.0.jar". The application has a REST endpoint to obtain the solution on browser/postman as well as on console.
+I have used Spring Boot framework and Spring MVC design to develop this application wherein I have let user to configure and feed various inputs as per requirements. The final runnable artifact - production ready artifact- is a jar file with name - "awayday-1.0.0.jar". The application has a REST end point to obtain the solution on browser/postman as well as on console.
 
 The solution has been approached with the intention of making it loosely coupled and abiding to design principles like - Open-Closed and Single Responsibility Principle, keeping the code as flexible as it could.
 
@@ -25,9 +25,9 @@ The solution has been approached with the intention of making it loosely coupled
 
 Following steps shows the brief code flow at higher level:
 
- - Feed activities.txt input file as input, parse each line using streams and save each activity details into datastructure. For each activity, Datastructure holds details like - Activity Name, Activity Time, Is Activity Ongoing at given time and List of Teams that have already took part this particular activity.
- - The REST endpoint takes 'number of teams' as an input parameter. Take this input and create given no of teams and feed team details into a static datastructure. Team details includes - Team Name, List of Activities played by each team, On Going Activity of that team at that time, Whether lunch break is done for the team and The end time of currently ongoing activity of each team.
- - Create Schedule - Start with the given start time and for each team, allocate the activity and update the corresponding data structures. At every 5 minutes, check if any team is free and if yes, find any valid activity - that it has not taken part before in - and assign it to the team. The process goes on till the time reaches end time. During the process, if any team gets done with any activity, the team release the activity and marks it free. Also, the cheks has been done for given Lunch Time and every team gets an hour of Lunch Break whenever feasable around Lunch Time.
+ - Feed activities.txt input file as input, parse each line using streams and save each activity details into data structure. For each activity, Data structure holds details like - Activity Name, Activity Time, Is Activity Ongoing at given time and List of Teams that have already took part this particular activity.
+ - The REST end point takes 'number of teams' as an input parameter. Take this input and create given no of teams and feed team details into a static data structure. Team details includes - Team Name, List of Activities played by each team, On Going Activity of that team at that time, Whether lunch break is done for the team and The end time of currently ongoing activity of each team.
+ - Create Schedule - Start with the given start time and for each team, allocate the activity and update the corresponding data structures. At every 5 minutes, check if any team is free and if yes, find any valid activity - that it has not taken part before in - and assign it to the team. The process goes on till the time reaches end time. During the process, if any team gets done with any activity, the team release the activity and marks it free. Also, the checks has been done for given Lunch Time and every team gets an hour of Lunch Break whenever feasible  around Lunch Time.
  - Send output to console and as http response.
  
 ### Data Structure: 
@@ -64,8 +64,8 @@ This demo takes in default start time = 09:00 am, end time = 5:00 pm,  lunch tim
    ```sh
    java -jar awayday-1.0.0.jar
    ```
-5. This would start the app on 8080 port by default. This would consider default activities.txt file as input which is already on build path under "resource/inputfile/activities.txt" location.
-6. Open any browser , preferrable Google Chrome, and hit the below rest endpoint. 
+5. This would start the app on 8080 port by default. This would consider default activities.txt file as input which is already on build path under "resource/activities.txt" location.
+6. Open any browser, preferably  Google Chrome, and hit the below rest end point. 
     
     http://localhost:8080/getschedule/2 
 
@@ -83,12 +83,12 @@ This demo takes in default start time = 09:00 am, end time = 5:00 pm,  lunch tim
     gradlew clean build
     ```
 3. Above command would create a runnable jar file under "build\libs\awayday-1.0.0.jar".
-4. Run this jar and provide file path as per below command. Let's assume that user has kept "activities.txt" input file at "D:\input\activities.txt". Simillarly, we can providr schedule start time and end time. This is discussed in "Externalizing configuration" section below.
+4. Run this jar and provide file path as per below command. Let's assume that user has kept "activities.txt" input file at "D:\input\activities.txt". Similarly, we can provide schedule start time and end time. This is discussed in "Externalizing configuration" section below.
    ```sh
    java -jar awayday-1.0.0.jar --fileName="D:\input\activities.txt"
    ```
 5. This would start the app on 8080 port by default. This would consider activities.txt file as input which is present at user's own local system. 
-6. Open any browser , preferrable Google Chrome, and hit the below rest endpoint. 
+6. Open any browser , preferably  Google Chrome, and hit the below rest end point. 
 
     http://localhost:8080/getschedule/2 
 
@@ -103,23 +103,6 @@ Just like the acitivites.txt input file, default startTime, endTime and lunch ti
 java -jar awayday-1.0.0.jar --fileName="D:\input\activities.txt" --startTime=11:00 --endTime=19:00 --lunchTimeStartsAt=14:00 lunchTimeEndsAt=15:00
 ```
 
-Where start time and end time can be anything but in 24 hour formate.
+Where start time and end time can be anything but in 24 hour format.
 
 Also, We can provide these values in application.properties file itself instead of passing them over command prompt, as shown below.
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
- 
- 
- 
