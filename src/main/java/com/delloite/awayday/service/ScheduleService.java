@@ -69,8 +69,8 @@ public class ScheduleService {
 	public void parseActivities(String fileNameAndPath) {
 		try {
 			if(fileNameAndPath.isEmpty()) {
-				File file = ResourceUtils.getFile("classpath:inputfile/activities.txt");
-
+				File file = ResourceUtils.getFile("activities.txt");
+				
 				if(file == null) {
 					logger.error("Input File is not present on classpath");
 					throw new FileNotFoundException("Input File is not present on classpath");
