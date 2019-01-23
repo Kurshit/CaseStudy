@@ -34,7 +34,7 @@ Following steps shows the brief code flow at higher level:
 
 To maintain the details of each activity and teams, I have chosen Map<String, Map<String,Object>> data structure. Alternate data structure I had in my mind was to store these records as a JSON. Given the performance of Map and java8 streams, I decided to go ahead with Map.
 
-### REST End Point;
+### REST End Point:
 
 Following end point is to be hit to get the schedule.
 
